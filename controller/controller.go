@@ -2,27 +2,30 @@ package controller
 
 import "github.com/gorilla/mux"
 
+type ControllerArgs struct {
+	Prefix string
+	Router IRouter
+}
 
-func DeclareController(routers IRouter) *Controller {
-	rt := make([]IRouter, 0)
-	rt = append(rt, routers)
-
-    return &Controller{routers: rt}
+// Declare set a controller with a sets of routers
+func DeclareController(args ControllerArgs) *Controller {
+    return &Controller{router: args.Router, prefix: args.Prefix}
 }
 
 type Controller struct {
-	routers []IRouter
+	router IRouter
+	prefix string
 }
 
-func (c *Controller) AddRouter(router IRouter) {
-	c.routers = append(c.routers, router)
-}
-
+// Resolve resolve all routers in the controller
 func (c *Controller) Resolve(r *mux.Router) error {
-	for _, router := range c.routers {
-		if err := router.Resolve(r); err != nil {
-			return err
-		}
+	if c.prefix != "" {
+		r = r.PathPrefix(c.prefix).Subrouter()
 	}
+
+	if err := c.router.Resolve(r); err != nil {
+		return err
+	}
+
 	return nil
 }
