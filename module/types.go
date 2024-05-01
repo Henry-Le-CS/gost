@@ -2,7 +2,7 @@ package module
 
 import "gost/controller"
 
-type RegisterModulePayload struct {
-	name string
-	controllers []controller.ControllerType
+type RegisterModuleDto struct {
+	Name string
+	Controllers []controller.ControllerType
 }

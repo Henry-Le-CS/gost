@@ -6,28 +6,29 @@ import (
 	"net/http"
 )
 
-type Server struct {
-    address string
-	modules []module.Module
+type BaseServer struct {
+    address  string
+    modules  []module.IModule
 }
 
-func NewServer(address string, modules []module.Module) *Server {
-    return &Server{
+func NewServer(address string, modules []module.IModule) *BaseServer {
+    return &BaseServer{
         address: address,
         modules: modules,
     }
 }
 
-func (s *Server) Start() error {
-	log.Printf("Server is running at %s", s.address)
+func (s *BaseServer) Start() error {
+    log.Printf("Server is running at %s", s.address)
     return http.ListenAndServe(s.address, nil)
 }
 
-// TODO: resolve modules and routers
-func (s* Server) ResolveModules() {
-	for _, module := range s.modules {
-		for _, controller := range module.GetControllers() {
-			// http.Handle(controller, controller.handler)
-		}
-	}
+func (s *BaseServer) ResolveModules() error {
+    for _, m := range s.modules {
+        if err := m.ResolveModules(); err != nil {
+            return err
+        }
+    }
+	
+    return nil
 }
