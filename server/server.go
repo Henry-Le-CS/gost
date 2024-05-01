@@ -22,17 +22,27 @@ func NewServer(address string, modules []module.IModule) *BaseServer {
 
 func (s *BaseServer) Start() error {
     log.Printf("Server is running at %s", s.address)
-    return http.ListenAndServe(s.address, nil)
+    routerHandler, err := s.Resolve()
+
+    if err != nil {
+        return err
+    }
+
+    
+    return http.ListenAndServe(
+        s.address, 
+        routerHandler,
+    )
 }
 
-func (s *BaseServer) ResolveModules() error {
+func (s *BaseServer) Resolve() (http.Handler,error) {
     router := mux.NewRouter()
 
     for _, m := range s.modules {
         if err := m.ResolveModules(router); err != nil {
-            return err
+            return nil, err
         }
     }
 	
-    return nil
+    return router, nil
 }
