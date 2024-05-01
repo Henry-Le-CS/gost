@@ -12,13 +12,13 @@ func TestControllers() *gost.Controller {
 	// Declare routes
 	router.Add(gost.DeclareRouteHandler(
 		"GET",
-		"user",
+		"/",
 		getUserInfo,
 	))
 
 	router.Add(gost.DeclareRouteHandler(
 		"GET",
-		"data",
+		"/detail",
 		getUserData,
 	))
 
