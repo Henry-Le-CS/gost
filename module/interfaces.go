@@ -1,9 +1,8 @@
 package module
 
-import "gost/controller"
+import "github.com/gorilla/mux"
 
 type IModule interface {
 	Register(payload RegisterModuleDto) *Module
-	GetControllers() []controller.ControllerType
-	ResolveModules() error
+	ResolveModules(router *mux.Router) error
 }

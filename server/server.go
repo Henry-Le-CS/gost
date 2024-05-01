@@ -4,6 +4,8 @@ import (
 	"gost/module"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type BaseServer struct {
@@ -24,8 +26,10 @@ func (s *BaseServer) Start() error {
 }
 
 func (s *BaseServer) ResolveModules() error {
+    router := mux.NewRouter()
+
     for _, m := range s.modules {
-        if err := m.ResolveModules(); err != nil {
+        if err := m.ResolveModules(router); err != nil {
             return err
         }
     }

@@ -3,11 +3,13 @@ package module
 import (
 	"gost/controller"
 	"log"
+
+	"github.com/gorilla/mux"
 )
 
 type Module struct {
 	Name        string
-	Controllers []controller.ControllerType
+	Controllers []controller.IController
 }
 
 func DeclareModule(payload RegisterModuleDto) *Module {
@@ -23,15 +25,15 @@ func (m *Module) Register(payload RegisterModuleDto) *Module {
 	return m
 }
 
-func (m *Module) GetControllers() []controller.ControllerType {
-	return m.Controllers
-}
+/*
+	Resolve all controllers in the module
+*/
+func (m *Module) ResolveModules(router *mux.Router) error {
+	for _, c := range m.Controllers {
+		if err := c.Resolve(router); err != nil {
+			return err
+		}
+	}
 
-func (m *Module) ResolveModules() error {
-	// for _, c := range m.Controllers {
-	// 	if err := c.Resolve(); err != nil {
-	// 		return err
-	// 	}
-	// }
 	return nil
 }
