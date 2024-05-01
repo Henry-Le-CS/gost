@@ -1,4 +1,4 @@
-package server
+package gost
 
 import (
 	"gost/module"
