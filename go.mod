@@ -1,4 +1,4 @@
-module gost
+module github.com/Henry-Le-CS/gost
 
 go 1.22.2
 
