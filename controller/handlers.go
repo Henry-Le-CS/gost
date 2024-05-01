@@ -21,6 +21,7 @@ func (e *RouteHandlerError) Error() string {
 	return e.message
 }
 
+// Declare RouteHandler declare a new route handler
 func DeclareRouteHandler(method string, pattern string, handler func(w http.ResponseWriter, r *http.Request)) *RouteHandler {
 	if method == "" {
 		method = "GET"
@@ -33,6 +34,7 @@ func DeclareRouteHandler(method string, pattern string, handler func(w http.Resp
 	return &RouteHandler{method: method, pattern: pattern, handler: handler}
 }
 
+// Resolve the route handler
 func (rh * RouteHandler) Resolve(router * mux.Router) error {
 	r := router.HandleFunc(rh.pattern, rh.handler).Methods(rh.method)
 
