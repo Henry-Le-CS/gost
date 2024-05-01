@@ -1,26 +1,28 @@
 package controller
 
-import (
-	"github.com/gorilla/mux"
-)
+import "github.com/gorilla/mux"
+
+
+func DeclareController(routers IRouter) *Controller {
+	rt := make([]IRouter, 0)
+	rt = append(rt, routers)
+
+    return &Controller{routers: rt}
+}
 
 type Controller struct {
-	name string
-	handlers []RouteHandler
+	routers []IRouter
 }
 
-
-
-func DeclareController(name string, handlers []RouteHandler) *Controller {
-	return &Controller{name: name, handlers: handlers}
+func (c *Controller) AddRouter(router IRouter) {
+	c.routers = append(c.routers, router)
 }
 
-func (c *Controller) Resolve(router * mux.Router) error {
-	for _, h := range c.handlers {
-		if err := h.Resolve(router); err != nil {
+func (c *Controller) Resolve(r *mux.Router) error {
+	for _, router := range c.routers {
+		if err := router.Resolve(r); err != nil {
 			return err
 		}
 	}
-
 	return nil
 }
