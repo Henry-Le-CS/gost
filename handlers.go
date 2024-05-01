@@ -1,4 +1,4 @@
-package controller
+package gost
 
 import (
 	"net/http"

@@ -1,7 +1,6 @@
 package gost
 
 import (
-	"gost/controller"
 	"log"
 
 	"github.com/gorilla/mux"
@@ -9,7 +8,7 @@ import (
 
 type Module struct {
 	Name        string
-	Controllers []controller.IController
+	Controllers []IController
 }
 
 func DeclareModule(payload RegisterModuleDto) *Module {
