@@ -1,4 +1,4 @@
-package module
+package gost
 
 import "gost/controller"
 

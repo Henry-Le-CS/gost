@@ -1,7 +1,6 @@
 package gost
 
 import (
-	"gost/module"
 	"log"
 	"net/http"
 
@@ -10,10 +9,10 @@ import (
 
 type BaseServer struct {
     address  string
-    modules  []module.IModule
+    modules  []IModule
 }
 
-func NewServer(address string, modules []module.IModule) *BaseServer {
+func NewServer(address string, modules []IModule) *BaseServer {
     return &BaseServer{
         address: address,
         modules: modules,

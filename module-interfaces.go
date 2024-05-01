@@ -1,4 +1,4 @@
-package module
+package gost
 
 import "github.com/gorilla/mux"
 
