@@ -6,21 +6,32 @@ import (
 )
 
 type Module struct {
-	name string
-	controllers []controller.ControllerType
+	Name        string
+	Controllers []controller.ControllerType
 }
 
-func (m *Module) Register(payload RegisterModulePayload) *Module {
-	m.controllers = payload.controllers
-	m.name = payload.name
+func DeclareModule(payload RegisterModuleDto) *Module {
+	m := &Module{}
+	return m.Register(payload)
+}
 
-	log.Printf("Module %s is registered", m.name)
+func (m *Module) Register(payload RegisterModuleDto) *Module {
+	m.Controllers = payload.Controllers
+	m.Name = payload.Name
+
+	log.Printf("Module %s is registered", m.Name)
 	return m
 }
 
 func (m *Module) GetControllers() []controller.ControllerType {
-	return m.controllers
+	return m.Controllers
 }
 
-// TODO: resolve dependencies
-// TODO: resolve controllers
+func (m *Module) ResolveModules() error {
+	// for _, c := range m.Controllers {
+	// 	if err := c.Resolve(); err != nil {
+	// 		return err
+	// 	}
+	// }
+	return nil
+}
