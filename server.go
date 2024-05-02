@@ -5,17 +5,29 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
+
+type CorsOptions struct {
+    AllowedOrigins []string
+    AllowCredentials bool
+}
+
+type ServerOptions struct {
+    CorsOptions CorsOptions
+}
 
 type BaseServer struct {
     address  string
     modules  []IModule
+    options ServerOptions
 }
 
-func NewServer(address string, modules []IModule) *BaseServer {
+func NewServer(address string, modules []IModule, options *ServerOptions) *BaseServer {
     return &BaseServer{
         address: address,
         modules: modules,
+        options: *options,
     }
 }
 
@@ -25,6 +37,15 @@ func (s *BaseServer) Start() error {
 
     if err != nil {
         return err
+    }
+
+   if s.options.CorsOptions.AllowedOrigins != nil {
+        c := cors.New(cors.Options{
+            AllowedOrigins: s.options.CorsOptions.AllowedOrigins,
+            AllowCredentials: s.options.CorsOptions.AllowCredentials,
+        })
+
+        routerHandler = c.Handler(routerHandler)
     }
 
     
