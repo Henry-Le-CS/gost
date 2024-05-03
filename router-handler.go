@@ -27,10 +27,6 @@ func DeclareRouteHandler(method string, pattern string, handler func(w http.Resp
 		method = "GET"
 	}
 
-	if pattern == "" {
-		pattern = "/"
-	}
-
 	return &RouteHandler{method: method, pattern: pattern, handler: handler}
 }
 
